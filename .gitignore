@@ -1,0 +1,5 @@
+# IDE Stuff
+*.idea
+
+# Django Stuff
+db.sqlite3
