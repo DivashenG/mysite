@@ -274,3 +274,15 @@ True
     * It returns an HttpResponse object of the given template rendered with the given context.
 
 ### Raising a 404 error
+* Add following to view:
+```python
+...
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
+...
+```
+* Shortcut is ` get_object_or_404()`
+
+### Namespacing URL names
+* It's important to namespace our urls in each app. 
+* In an app's urls.py add an app_name.
