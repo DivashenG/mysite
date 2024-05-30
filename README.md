@@ -76,7 +76,7 @@ urlpatterns = [
 ]      
 ```
 * `include()` function allows referencing other URLconfs.
-
+---
 ## Database setup
 * Default configuration uses SQLite.
 * This is configured under `DATABASES` -> `ENGINE`.
@@ -247,3 +247,42 @@ True
 
 ### Make poll app modifiable in the admin.
 * Edit `<app>/admin.py` to tell admin that an object has an admin interface.
+---
+## Writing more views
+* URLconfs maps URL patterns to views.
+* To add a view, do the following:
+  * add a method to `views.py`
+  * add the path in `urls.py` under urlpatterns.
+
+## Writing view that actually do something
+* A view is responsible for one of 2 outputs:
+  * returning `HttpResponse` object - content for the requested page.
+  * reaising an exception like `Http404`.
+* View can read from db, use template system and generate various outputs (eg pdf, xml, zip) using various libraries.
+* `Templates` allow us avoid page designs being hardcoded in views by seperating the design.
+* For templates:
+  * Create a /templates directory in your app.
+  * TEMPLATES in settings.py describes how Django loads and renders templates.
+  * Create another directory /polls and an index.html inside so you have `polls/templates/polls/index.html`.
+    * `polls/templates` can work but Django chooses the first template it finds so we want to be verbose.
+* A shortcut `render()`:
+  * To load template, fill a context and return `HttpResponse` use `render()`.
+  *  render() function takes:
+    * request object as its first argument.
+    * a template name as its second argument.
+    * a dictionary as its optional third argument. 
+    * It returns an HttpResponse object of the given template rendered with the given context.
+
+### Raising a 404 error
+* Add following to view:
+```python
+...
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
+...
+```
+* Shortcut is ` get_object_or_404()`
+
+### Namespacing URL names
+* It's important to namespace our urls in each app. 
+* In an app's urls.py add an app_name.
