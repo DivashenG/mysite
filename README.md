@@ -273,7 +273,7 @@ True
     * a dictionary as its optional third argument. 
     * It returns an HttpResponse object of the given template rendered with the given context.
 
-### Raising a 404 error
+## Raising a 404 error
 * Add following to view:
 ```python
 ...
@@ -283,6 +283,33 @@ True
 ```
 * Shortcut is ` get_object_or_404()`
 
-### Namespacing URL names
+## Namespacing URL names
 * It's important to namespace our urls in each app. 
 * In an app's urls.py add an app_name.
+---
+## Write a minimal form
+* An example of a form with radio button:
+```html
+<form action="{% url 'polls:vote' question.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ question.question_text }}</h1></legend>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    {% endfor %}
+</fieldset>
+<input type="submit" value="Vote">
+</form>
+```
+* Always include `{% csrf_token %}` in requests that change state.
+
+## Use generic views
+* Django provides generic views for common views.
+* To use this we need to:
+  * Convert the URLconf. 
+  * Delete some of the old, unneeded views. 
+  * Introduce new views based on Django’s generic views.
+* Each generic view needs to know the model it is acting on.(model attribute)
+* We use the template_name attribute to specify which template to use.
